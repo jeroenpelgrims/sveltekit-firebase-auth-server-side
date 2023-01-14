@@ -1,16 +1,17 @@
-import { apps, initializeApp, credential } from 'firebase-admin';
-import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
-import { FIREBASE_ADMIN_PRIVATE_KEY, FIREBASE_ADMIN_CLIENT_EMAIL } from '$env/static/private';
+import { FIREBASE_ADMIN_CLIENT_EMAIL, FIREBASE_ADMIN_PRIVATE_KEY } from '$env/static/private';
 import { PUBLIC_FIREBASE_PROJECT_ID } from '$env/static/public';
+import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 
 function makeApp() {
+	const apps = getApps();
 	if (apps.length > 0) {
 		return apps[0]!;
 	}
 
 	return initializeApp({
-		credential: credential.cert({
+		credential: cert({
 			privateKey: FIREBASE_ADMIN_PRIVATE_KEY,
 			clientEmail: FIREBASE_ADMIN_CLIENT_EMAIL,
 			projectId: PUBLIC_FIREBASE_PROJECT_ID
